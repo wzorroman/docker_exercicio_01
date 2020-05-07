@@ -2,16 +2,17 @@ version: "2"
 
 services:
   db:
-    image: postgres:9.5
-    environment:
-      - POSTGRES_DB=mydb
-      - POSTGRES_USER=example
-      - POSTGRES_PASSWORD=secret
-      - PGDATA=/var/lib/postgresql/data/pgdata
-    volumes:
-      - db_data=/var/lib/postgresql/data/pgdata
+    extends:
+      file: base.yml
+      service: db
+
   web:
-    build: ./webapp
+    extends:
+      file: base.yml
+      service: web
+    build:
+      args:
+        - DJANGO_ENV=dev
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./webapp:/webapp
